@@ -1,0 +1,15 @@
+---
+const { title, typeNum, id } = Astro.props;
+let newId = id.replace(' ', '-').toLowerCase();
+---
+
+<label class='flex flex-col items-start my-2'>
+  <span class='inline ms-2 text-gray-800 text-lg'>{title}</span>
+  <input
+    id=`${newId}`
+    class='border-gray-600 border-2 rounded-md px-4 min-w-72'
+    name=`${newId}`
+    type=`${ typeNum ? typeNum : 'text'}`
+    placeholder=`${title}`
+  />
+</label>

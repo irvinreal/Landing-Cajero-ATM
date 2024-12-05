@@ -1,17 +1,67 @@
+---
+const endPath = Astro.url.pathname
+---
+
 <nav class='w-full flex justify-center items-center flex-col gap-3 mt-20'>
-  <a
-    href='/depositar'
+  {
+    !endPath.includes('/my-account') && (
+      <a
+        href='/login'
+        class='bg-gray-700 text-white p-2 rounded-sm w-52 text-center transition-colors duration-150 hover:bg-gray-800/70 hover:shadow-md'
+      >
+        Ingresar
+      </a>
+    )
+  }
+  {
+    endPath.includes('/my-account') && (
+    <a
+    href='/my-account/deposit'
     class='bg-gray-800 text-white p-2 rounded-sm w-52 text-center transition-colors duration-150 hover:bg-gray-800/70 hover:shadow-md'
-    >Depositar</a
   >
+    Depositar
+  </a>
   <a
-    href='/retirar'
+    href='/my-account/withdraw'
     class='bg-gray-800 text-white p-2 rounded-sm w-52 text-center transition-colors duration-150 hover:bg-gray-800/70 hover:shadow-md'
-    >Retirar</a
   >
+    Retirar
+  </a>
   <a
-    href='/transferir'
+    href='/my-account/transfer'
     class='bg-gray-800 text-white p-2 rounded-sm w-52 text-center transition-colors duration-150 hover:bg-gray-800/70 hover:shadow-md'
-    >Transferir a otra cuenta</a
   >
+    Transferir a otra cuenta
+  </a>
+    )
+  }
+  <!-- Al salir borrar credenciales para proteger las rutas -->
+  {
+    endPath.includes('/my-account') && (
+      <button
+        id="btn-salir"
+        class='bg-red-800 text-white p-2 rounded-sm w-52 text-center transition-colors duration-150 hover:bg-red-700/80 hover:shadow-md'
+      >
+        Salir
+      </button>
+    )
+  }
 </nav>
+
+<script>
+  // Botón Salir: 
+  // -navegar a '/'
+  // -Borrar cookies
+
+import { navigate } from 'astro:transitions/client'
+import deleteCookies from '../utils/deleteCookies'
+
+const $btnSalir = document.getElementById('btn-salir')
+
+$btnSalir?.addEventListener('click', () => {
+
+  deleteCookies()
+  navigate('/')
+})
+
+</script>

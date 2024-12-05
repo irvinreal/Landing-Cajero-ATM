@@ -1,0 +1,17 @@
+---
+import Footer from '../../components/Footer.astro'
+import NavLinks from '../../components/NavLinks.astro'
+import Layout from '../../layouts/Layout.astro'
+import ScreenLayout from '../../layouts/ScreenLayout.astro'
+---
+
+<Layout title='Simulación de Cajero ATM'>
+  <main class=''>
+    <!-- Todo: Add clock time on top of the page -->
+    <section class='flex'>
+      <ScreenLayout />
+      <NavLinks />
+    </section>
+  </main>
+  <Footer />
+</Layout>

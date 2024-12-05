@@ -1,0 +1,57 @@
+---
+import Input from '../components/Input.astro'
+import Layout from '../layouts/Layout.astro'
+---
+
+<!-- action='http://localhost:3000/auth/register'
+      method='post' -->
+<Layout title='Crear Cuenta Nueva'>
+  <main class='text-center'>
+    <h2 class='my-10 text-lg font-semibold'>Ingrese sus datos</h2>
+    <form class='max-w-72 mx-auto' id='client-form'>
+      <Input id='name' title='Nombre' />
+      <Input id='password' title='Contraseña' type='password' />
+      <button
+        id='form-button'
+        class='bg-gray-700 rounded-md py-1 px-10 mt-5 text-gray-100 transition-colors duration-150 hover:text-white hover:bg-gray-800 hover:shadow-md font-semibold'
+        type='submit'
+      >
+        Ingresar
+      </button>
+    </form>
+  </main>
+</Layout>
+
+<script>
+  const clientForm = document.getElementById('client-form')
+  import { navigate } from 'astro:transitions/client'
+  import setCookies from '../utils/setCookies'
+
+  clientForm?.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.target as HTMLFormElement)
+
+    const data = Object.fromEntries(formData.entries())
+
+    try {
+      const res = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      const resData = await res.json()
+
+      if (res.ok) {
+        console.log(resData)
+        // Set auth cookie token
+        setCookies(resData.token, resData.userId)
+        // Redirigir a la página del cliente para realizar una operacion
+        navigate('/my-account')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  })
+</script>

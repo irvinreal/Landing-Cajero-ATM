@@ -1,0 +1,51 @@
+---
+import Input from '../components/Input.astro'
+import Layout from '../layouts/Layout.astro'
+---
+
+<!-- action='http://localhost:3000/auth/register'
+      method='post' -->
+<Layout title='Crear Cuenta Nueva'>
+  <main class='text-center'>
+    <h2 class='my-10 text-lg font-semibold'>Ingrese sus datos</h2>
+    <form class='max-w-72 mx-auto' id='client-form'>
+      <Input id='name' title='Nombre' />
+      <Input id='password' title='Contraseña' type='password' />
+      <Input id='amount' title='Saldo Inicial' typeNum />
+      <button
+        id='form-button'
+        class='bg-gray-700 rounded-md py-1 px-10 mt-5 text-gray-100 transition-colors duration-150 hover:text-white hover:bg-gray-800 hover:shadow-md font-semibold'
+        type='submit'
+      >
+        Crear cuenta
+      </button>
+    </form>
+  </main>
+</Layout>
+
+<script>
+  const clientForm = document.getElementById('client-form')
+  import { navigate } from 'astro:transitions/client'
+
+  clientForm?.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.target as HTMLFormElement)
+
+    const data = Object.fromEntries(formData.entries())
+
+    try {
+      const res = await fetch('http://localhost:3000/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      if (res.ok) {
+        navigate('/login')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  })
+</script>

@@ -1,0 +1,26 @@
+<div class='w-full ms-24 mt-10'>
+  <div><h2 id='name'></h2></div>
+  <div><h3>Saldo: <span id='saldo'></span></h3></div>
+</div>
+
+<script>
+  import formatAmount from '../utils/formatAmount'
+  import formatName from '../utils/formatName'
+
+  const $saldo = document.getElementById('saldo') as HTMLElement
+  const $name = document.getElementById('name') as HTMLElement
+
+  try {
+    const res = await fetch('http://localhost:3000/auth/my-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'irvin' }),
+    })
+    const data = await res.json()
+    console.log(data)
+    $saldo.innerHTML = `$${formatAmount(data.amount)}`
+    $name.innerHTML = formatName(data.name)
+  } catch (error) {
+    console.log(error)
+  }
+</script>

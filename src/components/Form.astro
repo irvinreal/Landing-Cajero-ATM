@@ -1,0 +1,74 @@
+---
+const { btnTitle, label } = Astro.props
+const pathname = Astro.url.pathname
+---
+
+<form id='form' class='flex flex-col w-64 gap-4'>
+  <div class='mt-6 flex flex-col gap-4'>
+    <h5>{label}</h5>
+    <input placeholder='$ 000.00' type='number' name='amount' />
+  </div>
+  {
+    pathname.endsWith('/transfer') && (
+      <div class='flex flex-col gap-4'>
+        <h5>Id de cuenta a la que desea transferir</h5>
+        <input placeholder='ej. 87893hbd9j3hd7..' type='text' name='id-user' />
+      </div>
+    )
+  }
+  <button type='submit' class='bg-gray-800 text-gray-300 rounded-sm'>{btnTitle}</button>
+</form>
+
+<script>
+  import getCookies from '../utils/getCookies'
+  const { token } = getCookies()
+
+  document.getElementById('form')?.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const form = event.target as HTMLFormElement
+    const formData = new FormData(form)
+    const amount = formData.get('amount')
+    const idUser = formData.get('id-user')
+
+    if (!amount) {
+      alert('Ingrese una cantidad.')
+      return
+    }
+
+    const pathname = window.location.pathname
+
+    let method
+    let endPath
+    let query = { amount: amount }
+
+    if (pathname.endsWith('/deposit')) {
+      method = 'PATCH'
+      endPath = 'deposit'
+    } else if (pathname.endsWith('/withdraw')) {
+      method = 'PATCH'
+      endPath = 'withdraw'
+    } else if (pathname.endsWith('/transfer')) {
+      method = 'POST'
+      endPath = 'transfer'
+      query = { amount: amount, userToTransfer: idUser }
+    }
+
+    const res = await fetch(`http://localhost:3000/auth/my-account/${endPath}`, {
+      method: method,
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(query),
+    })
+    if (res.ok) {
+      window.location.reload()
+    }
+
+    const resData = await res.json()
+
+    // console.log(amount, idUser)
+    console.log(resData)
+  })
+</script>

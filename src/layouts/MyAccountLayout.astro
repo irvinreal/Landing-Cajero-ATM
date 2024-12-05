@@ -1,0 +1,18 @@
+---
+const { title } = Astro.props
+
+import Footer from '../components/Footer.astro'
+import NavLinks from '../components/NavLinks.astro'
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title={title}>
+  <main class='h-[75%]'>
+    <!-- Todo: Add clock time on top of the page -->
+    <section class='flex bg-gray-300 h-full'>
+      <slot />
+      <NavLinks />
+    </section>
+  </main>
+  <Footer />
+</Layout>
