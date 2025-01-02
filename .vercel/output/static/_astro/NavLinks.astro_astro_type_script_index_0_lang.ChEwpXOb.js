@@ -1,0 +1,1 @@
+import{n as e}from"./router.hIIS2Ntx.js";function o(){localStorage.removeItem("token"),localStorage.removeItem("expiryDate"),localStorage.removeItem("userId"),console.log("Logged out.")}const t=document.getElementById("btn-salir");t?.addEventListener("click",()=>{o(),e("/")});

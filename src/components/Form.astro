@@ -12,7 +12,7 @@ const pathname = Astro.url.pathname
     pathname.endsWith('/transfer') && (
       <div class='flex flex-col gap-4'>
         <h5>Id de cuenta a la que desea transferir</h5>
-        <input placeholder='ej. 87893hbd9j3hd7..' type='text' name='id-user' />
+        <input placeholder='ej. 87893hbd9j3hd7..' name='id-user' />
       </div>
     )
   }
@@ -22,6 +22,11 @@ const pathname = Astro.url.pathname
 <script>
   import getCookies from '../utils/getCookies'
   const { token } = getCookies()
+
+  interface Query {
+    userToTransfer: FormDataEntryValue | null;
+    amount: FormDataEntryValue;
+  }
 
   document.getElementById('form')?.addEventListener('submit', async (event) => {
     event.preventDefault()
@@ -40,7 +45,7 @@ const pathname = Astro.url.pathname
 
     let method
     let endPath
-    let query = { amount: amount }
+    let query: Query = { userToTransfer: null, amount: amount }
 
     if (pathname.endsWith('/deposit')) {
       method = 'PATCH'
@@ -51,7 +56,7 @@ const pathname = Astro.url.pathname
     } else if (pathname.endsWith('/transfer')) {
       method = 'POST'
       endPath = 'transfer'
-      query = { amount: amount, userToTransfer: idUser }
+      query = { userToTransfer: idUser, amount: amount }
     }
 
     const res = await fetch(`http://localhost:3000/auth/my-account/${endPath}`, {

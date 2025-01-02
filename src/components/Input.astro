@@ -1,5 +1,12 @@
 ---
-const { title, typeNum, id } = Astro.props;
+interface InputProps {
+  title: string;
+  inputType: "text" | "number" | "password";
+  id: string;
+}
+
+const props = Astro.props as InputProps;
+const { title, inputType, id }: InputProps = props;
 let newId = id.replace(' ', '-').toLowerCase();
 ---
 
@@ -9,7 +16,7 @@ let newId = id.replace(' ', '-').toLowerCase();
     id=`${newId}`
     class='border-gray-600 border-2 rounded-md px-4 min-w-72'
     name=`${newId}`
-    type=`${ typeNum ? typeNum : 'text'}`
+    type={inputType}
     placeholder=`${title}`
   />
 </label>
