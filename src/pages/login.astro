@@ -26,6 +26,9 @@ import Layout from '../layouts/Layout.astro'
   const clientForm = document.getElementById('client-form')
   import { navigate } from 'astro:transitions/client'
   import setCookies from '../utils/setCookies'
+  import { clientState } from '../stores/client.ts'
+  import { localStorageSetItem } from '../utils/localStorageSetItem'
+import { URLS } from '../constants'
 
   clientForm?.addEventListener('submit', async (event) => {
     event.preventDefault()
@@ -35,23 +38,27 @@ import Layout from '../layouts/Layout.astro'
     const data = Object.fromEntries(formData.entries())
 
     try {
-      const res = await fetch('http://localhost:3000/auth/login', {
+      const res = await fetch(URLS.login, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
 
       const resData = await res.json()
+      console.log(res)
 
       if (res.ok) {
         console.log(resData)
         // Set auth cookie token
         setCookies(resData.token, resData.userId)
+        // setear el name en el state
+        clientState.setKey('clientName', 'juan')
         // Redirigir a la página del cliente para realizar una operacion
         navigate('/my-account')
       }
     } catch (error) {
       console.log(error)
+      // Todo: show error on screen
     }
   })
 </script>

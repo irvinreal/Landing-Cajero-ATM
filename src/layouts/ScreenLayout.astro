@@ -1,32 +1,36 @@
 <div class='w-full ms-24 mt-10'>
+  <div><h2>Id de la cuenta: <span id='accountId'></span></h2></div>
   <div><h2>Cliente: <span id='name'></span></h2></div>
-  <div><h3>Saldo: <span id='saldo'></span></h3></div>
+  <div><h3>Saldo: <span id='amount'></span></h3></div>
   <section>
     <slot />
   </section>
 </div>
 
 <script>
-  import formatAmount from '../utils/formatAmount'
+  import { URLS } from '../constants'
+import formatAmount from '../utils/formatAmount'
   import formatName from '../utils/formatName'
   import getCookies from '../utils/getCookies'
 
-  const $saldo = document.getElementById('saldo') as HTMLElement
+  const $accountId = document.getElementById('accountId') as HTMLElement
+  const $amount = document.getElementById('amount') as HTMLElement
   const $name = document.getElementById('name') as HTMLElement
 
   const { token } = getCookies()
   // console.log(token)
 
   try {
-    const res = await fetch('http://localhost:3000/auth/my-account', {
+    const res = await fetch(URLS.clientInfo, {
       headers: {
         Authorization: 'Bearer ' + token,
       },
     })
     const resData = await res.json()
-    // console.log('data: ', resData)
-    $name.innerHTML = `${formatName(resData.client.name)}`
-    $saldo.innerHTML = `$${formatAmount(parseFloat(resData.amount))}`
+    console.log(resData)
+    $accountId.innerHTML = `${formatName(resData.accountId)}`
+    $name.innerHTML = `${formatName(resData.clientName)}`
+    $amount.innerHTML = `${formatAmount(parseFloat(resData.account.amount))}`
   } catch (error) {
     console.log(error)
   }

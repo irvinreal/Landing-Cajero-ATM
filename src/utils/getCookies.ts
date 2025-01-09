@@ -1,6 +1,8 @@
+import { localStorageGetItem } from "./localStorageGetItem"
+
 export default function getCookies() {
   return {
-    token: localStorage.getItem('token'),
-    userId: localStorage.getItem('userId'),
+    token: localStorageGetItem('token'),
+    userId: localStorageGetItem('userId'),
   }
 }

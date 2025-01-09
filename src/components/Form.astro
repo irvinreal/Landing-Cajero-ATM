@@ -11,7 +11,7 @@ const pathname = Astro.url.pathname
   {
     pathname.endsWith('/transfer') && (
       <div class='flex flex-col gap-4'>
-        <h5>Id de cuenta a la que desea transferir</h5>
+        <h5>Id de la cuenta a la que desea transferir</h5>
         <input placeholder='ej. 87893hbd9j3hd7..' name='id-user' />
       </div>
     )
@@ -20,7 +20,8 @@ const pathname = Astro.url.pathname
 </form>
 
 <script>
-  import getCookies from '../utils/getCookies'
+  import { URLS } from '../constants';
+import getCookies from '../utils/getCookies'
   const { token } = getCookies()
 
   interface Query {
@@ -59,7 +60,7 @@ const pathname = Astro.url.pathname
       query = { userToTransfer: idUser, amount: amount }
     }
 
-    const res = await fetch(`http://localhost:3000/auth/my-account/${endPath}`, {
+    const res = await fetch(`${URLS.movements}${endPath}`, {
       method: method,
       headers: {
         Authorization: 'Bearer ' + token,

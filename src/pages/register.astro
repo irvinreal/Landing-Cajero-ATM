@@ -26,6 +26,7 @@ import Layout from '../layouts/Layout.astro'
 <script>
   const clientForm = document.getElementById('client-form')
   import { navigate } from 'astro:transitions/client'
+  import { URLS } from '../constants'
 
   clientForm?.addEventListener('submit', async (event) => {
     event.preventDefault()
@@ -35,7 +36,7 @@ import Layout from '../layouts/Layout.astro'
     const data = Object.fromEntries(formData.entries())
 
     try {
-      const res = await fetch('http://localhost:3000/auth/register', {
+      const res = await fetch(URLS.register, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -46,6 +47,7 @@ import Layout from '../layouts/Layout.astro'
       }
     } catch (error) {
       console.log(error)
+      // Todo: show error on screen
     }
   })
 </script>
