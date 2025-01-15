@@ -9,7 +9,7 @@ import Layout from '../layouts/Layout.astro'
 <Layout title={title}>
   <main class='h-[75%]'>
     <!-- Todo: Add clock time on top of the page -->
-    <section class='flex bg-gray-300 h-full'>
+    <section class='flex flex-col md:flex-row bg-gray-300 h-full'>
       <slot />
       <NavLinks />
     </section>
